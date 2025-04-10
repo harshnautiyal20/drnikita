@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Nikita - Dental Surgeon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f0f8ff;
+        }
+
+        header {
+            position: relative;
+            color: rgb(0, 0, 0);
+            padding: 2rem;
+            text-align: center;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('Background2.jpg') center/cover no-repeat;
+            opacity: 0.2; /* Adjust this value to control how faded the image appears */
+            z-index: -1;
+        }
+
+
+
+        .profile-photo {
+            width: 320px;
+            height: 380px;
+            border-radius: 25%;
+            margin: 1rem auto;
+            border: 5px solid white;
+            object-fit: cover;
+            object-position: center top;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .quote-container {
+            color: #fff;
+            padding: 1.5rem;
+            margin: 1rem auto;
+            width: fit-content;
+            font-style: italic;
+            font-size: 1.4em;
+            text-align: center;
+            background-color: rgba(0, 139, 139, 0.7);
+            border-radius: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .gallery-container {
+            overflow-x: auto;
+            padding: 2rem 0;
+            background: white;
+            white-space: nowrap;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .gallery-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .gallery-container::-webkit-scrollbar-thumb {
+            background: #00ced1;
+            border-radius: 4px;
+        }
+
+        .scrolling-gallery {
+            display: inline-flex;
+            padding: 0 1rem;
+            gap: 1rem;
+        }
+
+        .scrolling-gallery img {
+            width: 300px;
+            height: 300px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .scrolling-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .price {
+            color: #e74c3c;
+            font-size: 1.2em;
+        }
+
+        .strike {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .btn {
+            background: #00ced1;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 1rem auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .qr-code:hover {
+            transform: scale(1.05);
+        }
+
+        section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #whatsappBtn {
+            animation: pulse 2s infinite;
+            margin-top: 1rem;
+            background: #25D366 !important;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .form-group {
+            margin: 1rem 0;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 2px solid #00ced1;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #008b8b;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+
+        ul {
+            padding-left: 2rem;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .image-modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        .close-image-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .profile-photo {
+                width: 280px;
+                height: 340px;
+            }
+
+            .quote-container {
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+
+            .scrolling-gallery img {
+                width: 250px;
+                height: 250px;
+            }
+
+            section {
+                padding: 1.5rem;
+                margin: 2rem 0;
+            }
+        }
+            /* Modified CSS for smooth scrolling */
+        .scrolling-gallery {
+            display: inline-flex;
+            padding: 0 1rem;
+            gap: 1rem;
+            animation: scroll 40s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .gallery-container:hover .scrolling-gallery {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="profile.jpg" alt="Dr. Nikita" class="profile-photo">
+        <h1>Dr. Nikita</h1>
+        <h2>Dental Surgeon</h2>
+        <div class="quote-container">"A happy mouth... is a happy mind"</div>
+    </header>
+
+    <div class="container">
+        <section>
+            <h2>About Me</h2>
+            <p style="text-align: justify;">Hello, I am Dr. Nikita, dedicated to providing comprehensive oral care and committed to contributing to healthcare in both clinical and non-clinical sectors for patients of all ages. With a focus on preventive dentistry, restorative treatments, and patient education, I help patients achieve and maintain healthy, beautiful smiles. Known for my gentle approach and commitment to personalized care, I ensure a comfortable and positive experience for every patient.</p>
+        </section>
+
+        <div class="gallery-container" id="galleryContainer">
+            <div class="scrolling-gallery" id="scrollingGallery">
+                <img src="smile1.jpg" alt="Smile Gallery" onclick="openImageModal('smile1.jpg')">
+                <img src="smile2.jpg" alt="Smile Gallery" onclick="openImageModal('smile2.jpg')">
+                <img src="smile3.jpg" alt="Smile Gallery" onclick="openImageModal('smile3.jpg')">
+                <img src="smile4.jpg" alt="Smile Gallery" onclick="openImageModal('smile4.jpg')">
+                <img src="smile5.jpg" alt="Smile Gallery" onclick="openImageModal('smile5.jpg')">
+                <img src="smile6.jpg" alt="Smile Gallery" onclick="openImageModal('smile6.jpg')">
+                <img src="smile7.jpg" alt="Smile Gallery" onclick="openImageModal('smile7.jpg')">
+                <img src="smile8.jpg" alt="Smile Gallery" onclick="openImageModal('smile8.jpg')">
+                <img src="smile9.jpg" alt="Smile Gallery" onclick="openImageModal('smile9.jpg')">
+                <img src="smile10.jpg" alt="Smile Gallery" onclick="openImageModal('smile10.jpg')">
+                <img src="smile11.jpg" alt="Smile Gallery" onclick="openImageModal('smile11.jpg')">
+                <img src="smile12.jpg" alt="Smile Gallery" onclick="openImageModal('smile12.jpg')">
+ 
+            </div>
+        </div>
+
+        <section style="text-align: center;">
+            <button class="btn" onclick="showBooking()">
+                Book Online Consultation <br>
+                <span class="price"><span class="strike">₹200</span> ₹150</span>
+            </button>
+        </section>
+
+        <section>
+            <h2>Qualifications & Experience</h2>
+            <ul>
+                <li>BDS - Maharishi Markandeshwar College of Dental Sciences and Research</li>
+                <li>1 Year Internship - MMCDSR</li>
+                <li>6 Months Internship - Civil Hospital Sec-10 Gurugram</li>
+                <li>6 Months Experience as Dental Surgeon - Gurugram Dental Clinic</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Services & Skills</h2>
+            <ul>
+                <li>General Dentistry</li>
+                <li>Root Canal Treatment</li>
+                <li>Tooth Extraction</li>
+                <li>Tooth Restorations</li>
+                <li>Ultrasonic Scaling</li>
+                <li>Dental Counselling</li>
+                <li>Oral Health Awareness</li>
+                <li>Patient Management</li>
+                <li>Communication Skills</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Contact Information</h2>
+            <p><i class="fas fa-phone"></i> 9495200034</p>
+            <p><i class="fas fa-envelope"></i> dr.nikitabamdev@gmail.com</p>
+            <p>
+                <a href="https://instagram.com/_dentistreee" target="_blank">
+                    <i class="fab fa-instagram"></i> @_dentistreee
+                </a>
+            </p>
+        </section>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h3>Book Appointment</h3>
+            <div class="form-group">
+                <label for="patientName">Full Name:</label>
+                <input type="text" id="patientName" required>
+            </div>
+            <div class="form-group">
+                <label for="appointmentDate">Date:</label>
+                <input type="date" id="appointmentDate" required>
+            </div>
+            <div class="form-group">
+                <label for="appointmentTime">Time:</label>
+                <input type="time" id="appointmentTime" required>
+            </div>
+            <button class="btn" onclick="showPayment()">Continue to Payment</button>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h3>Complete Payment</h3>
+            <a href="upi://pay?pa=jangranikita55@okhdfcbank" target="_blank">
+                <img src="qr-code.jpg" alt="Payment QR Code" class="qr-code">
+            </a>
+            <p>1. Scan QR & Pay ₹150<br>2. Click below to confirm via WhatsApp</p>
+            <a id="whatsappBtn" class="btn" target="_blank" style="text-decoration: none; display: none;">
+                <i class="fab fa-whatsapp"></i> Send Payment Proof
+            </a>
+        </div>
+    </div>
+
+    <div id="imageModal" class="image-modal">
+        <span class="close-image-modal" onclick="closeImageModal()">&times;</span>
+        <div class="image-modal-content">
+            <img id="expandedImage" src="" alt="Expanded Image">
+        </div>
+    </div>
+
+    <script>
+        // Gallery Auto-Scroll (Changed scrollSpeed from 1 to 2 for double speed)
+        const galleryContainer = document.getElementById('galleryContainer');
+        const gallery = document.getElementById('scrollingGallery');
+        const galleryItems = document.querySelectorAll('#scrollingGallery img');
+        
+        // Clone items for seamless looping
+        galleryItems.forEach(item => {
+            gallery.appendChild(item.cloneNode(true));
+        });
+
+        let scrollInterval;
+        let isUserScrolling = false;
+        const scrollSpeed = 3; // CHANGED FROM 1 TO 2 FOR DOUBLE SPEED
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const galleries = document.querySelectorAll('.scrolling-gallery');
+        galleries.forEach(gallery => {
+            gallery.addEventListener('animationiteration', () => {
+                // This ensures smooth infinite loop
+                gallery.style.animation = 'none';
+                void gallery.offsetHeight; // Trigger reflow
+                gallery.style.animation = 'scroll 50s linear infinite';
+                });
+            });
+        });
+
+        // Manual scroll control
+        galleryContainer.addEventListener('mousedown', (e) => {
+            isUserScrolling = true;
+            clearInterval(scrollInterval);
+            galleryContainer.style.cursor = 'grabbing';
+        });
+
+        galleryContainer.addEventListener('mouseup', () => {
+            isUserScrolling = false;
+            galleryContainer.style.cursor = 'grab';
+            startAutoScroll();
+        });
+
+        galleryContainer.addEventListener('mouseleave', () => {
+            isUserScrolling = false;
+            galleryContainer.style.cursor = 'grab';
+            startAutoScroll();
+        });
+
+        // Modal functions
+        function showBooking() {
+            document.getElementById('bookingModal').style.display = 'block';
+        }
+
+        function showPayment() {
+            const patientName = document.getElementById('patientName').value;
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+
+            if (!patientName || !date || !time) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            const message = `Hi Dr. Nikita! I've paid ₹150 for:\n`
+                         + `Patient Name: ${patientName}\n`
+                         + `Appointment: ${date} at ${time}\n`;
+
+            const whatsappUrl = `https://wa.me/919495200034?text=${encodeURIComponent(message)}`;
+            document.getElementById('whatsappBtn').href = whatsappUrl;
+            document.getElementById('whatsappBtn').style.display = 'block';
+            document.getElementById('paymentModal').style.display = 'block';
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('expandedImage');
+            img.src = imageSrc;
+            modal.style.display = 'flex';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                closeModal();
+            }
+            if (event.target.className === 'image-modal') {
+                closeImageModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeImageModal();
+            }
+        });
+
+        // Start auto-scroll when page loads
+        window.addEventListener('load', startAutoScroll);
+
+        // Pause when tab is not active
+        window.addEventListener('blur', () => {
+            clearInterval(scrollInterval);
+        });
+
+        window.addEventListener('focus', () => {
+            if (!isUserScrolling) {
+                startAutoScroll();
+            }
+        });
+    </script>
+</body>
+</html>
